@@ -2,51 +2,50 @@
 #include <vector>
 using namespace std;
 
-void Display(vector<int>&array, int lBound, int rBound){
-    for(int i = lBound; i < rBound; i++){
-        cout<< array[i] << " ";
+
+template<typename dataType>
+void Display(const vector<dataType>array){
+    for(dataType& i:array ){
+        cout<< i<< " ";
     }
+    cout<<endl;
+}
+
+template<typename T>
+void swap(T *address1, T *address2) {
+    T temp = *address1;
+    *address1 = *address2;
+    *address2 = temp;
 }
 
 
-unsigned int pivotIndexSelector(const vector<int>& array) {
-   return rand() % array.size();
+template <typename dataType>
+void partition(vector<dataType>&array, int leftBound, int rightBound){
 
-}
-
-void swap(int* memoryLoc1, int* memoryLoc2){
-
-    int* tempMemory = new int;
-    *tempMemory = *memoryLoc1;
-    *memoryLoc1 = *memoryLoc2;
-    *memoryLoc2 = *tempMemory;
-    delete tempMemory;
-}
-
-void partition (vector<int> &array,int leftBound,int RightBound){
-    if(RightBound  -  leftBound <= 1){
+    if(rightBound - leftBound <= 1){
         return;
     }
+
     int pivotIndex = leftBound;
-    int lower = leftBound + 1;
     int upper = leftBound + 1;
-    for(int i  = leftBound + 1; i < RightBound; i++){
+    int lower = leftBound + 1;
 
-        if(array[i] > array[pivotIndex]){
+    for(int i = leftBound + 1; i < rightBound; i++){
+        if(array[pivotIndex] < array[i] ){
             upper++;
-
         }
         else{
-            swap(&array[lower],&array[i]);
+            swap(&array[i],&array[lower]);
             lower++;
             upper++;
+
         }
     }
-    swap(&array[pivotIndex],&array[lower - 1]);
-    lower = lower - 1;
-    partition(array,leftBound,lower);
-    partition(array,lower + 1, RightBound);
 
+    lower = lower - 1;
+    swap(&array[pivotIndex], &array[lower]);
+    partition(array, leftBound, lower);
+    partition(array,lower + 1, rightBound);
 
 }
 
@@ -55,7 +54,7 @@ void partition (vector<int> &array,int leftBound,int RightBound){
 int main(){
     vector<int> array = {65, 20, 6, 7, 3, 6, 7, 92, 0, -80};
     partition(array,0, size(array));
-    Display(array,0, size(array));
+    Display(array);
 
 
 }
